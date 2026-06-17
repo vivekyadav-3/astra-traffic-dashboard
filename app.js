@@ -176,21 +176,25 @@ function renderGeohashMarkers() {
         const info = geohashes[gh];
         const val  = getAdjustedDemand(gh, currentTsIdx);
 
-        // Dynamic radius based on lane count
-        const radius = 55 + info.lanes * 18;
+        // Geohash-6 dimensions: Height ~0.005 lat, Width ~0.011 lon
+        const dLat = 0.00225;
+        const dLon = 0.0055;
+        const rectBounds = [
+            [info.lat - dLat, info.lon - dLon],
+            [info.lat + dLat, info.lon + dLon]
+        ];
 
-        const circle = L.circle([info.lat, info.lon], {
-            color:       getCongestionColor(val),
+        const rectangle = L.rectangle(rectBounds, {
+            color:       'rgba(0,0,0,0.25)',
             fillColor:   getCongestionColor(val),
-            fillOpacity: 0.55 + val * 0.25,
-            radius:      radius,
-            weight:      1.5
+            fillOpacity: 0.45 + val * 0.35,
+            weight:      1.0
         });
 
         // Rich popup
         const pct   = (val * 100).toFixed(1);
         const fillW = Math.round(val * 100);
-        circle.bindPopup(`
+        rectangle.bindPopup(`
             <div class="popup-title">
                 <i class="fa-solid fa-location-dot"></i> Zone: ${gh}
             </div>
@@ -223,8 +227,8 @@ function renderGeohashMarkers() {
             </div>
         `, { maxWidth: 240 });
 
-        circle.on('click', () => inspectGeohash(gh));
-        circle.addTo(markersGroup);
+        rectangle.on('click', () => inspectGeohash(gh));
+        rectangle.addTo(markersGroup);
         boundsArr.push([info.lat, info.lon]);
     }
 
