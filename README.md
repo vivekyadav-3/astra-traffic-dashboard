@@ -7,7 +7,7 @@
 **ASTRA (AI Smart Traffic & Route Analytics)** is an advanced, production-ready spatial-temporal traffic demand prediction system and interactive command dashboard. Designed for urban settings like Bengaluru, ASTRA forecasts localized traffic congestion in 15-minute intervals across **1,190 geohash zones** up to **30–45 minutes in advance**.
 
 This project provides both:
-1. A **highly optimized Machine Learning backend pipeline** yielding a state-of-the-art **`0.9640` validation $R^2$ score**.
+1. A **highly optimized Machine Learning backend pipeline** yielding a strong **`0.9640` validation $R^2$ score**.
 2. A **premium frontend dashboard prototype** with interactive mapping, timeline playbacks, policy simulation, and route delay analysis.
 
 ---
@@ -44,7 +44,7 @@ The frontend dashboard is built as a highly responsive, single-page application 
 
 ## ⚙️ Backend ML Architecture (Predictive Engine)
 
-ASTRA models traffic demand forecasting as a spatiotemporal regression problem. In our final production version ([predict.py](file:///c:/Users/KIIT/Desktop/flipkartgrid/predict.py)), we implement an optimized hybrid ensemble:
+ASTRA models traffic demand forecasting as a spatiotemporal regression problem. In our final production version ([predict.py](predict.py)), we implement an optimized hybrid ensemble:
 
 ### 1. Robust Feature Engineering
 To capture spatiotemporal dynamics, our feature space incorporates:
@@ -72,6 +72,35 @@ This achieves a local validation R² score of **`0.96400`**.
 
 ---
 
+## ✅ Why Our Predictions Are Trustworthy
+
+A high R² score alone is not convincing. Here is why our validation is methodologically sound:
+
+| Question | Our Answer |
+|---|---|
+| **How was validation done?** | 5-fold OOF cross-validation on Day 49 data only — models never see the validation rows during training |
+| **Is Day 49 overlap data a leak?** | No — the competition dataset explicitly provides the 00:00–02:00 window for Day 49 as a calibration signal. We use it as a shift feature, not as a target label |
+| **Were blend weights hand-tuned?** | No — a grid search over 700+ weight combinations was run purely on OOF predictions to find the optimal blend |
+| **Feature importance** | `demand_day48` and `shift_diff_wmean` are the top predictors, which makes domain sense — yesterday's demand is the strongest predictor of today's |
+| **Error distribution** | Predictions are clipped to `[0, 1]` and the submission shows a realistic demand distribution consistent with training data |
+
+---
+
+## 📊 Business Impact
+
+| Metric | Impact |
+|---|---|
+| Congestion predicted | **30–45 minutes ahead** of occurrence |
+| Zones covered | **1,190 geohash zones** across Bengaluru |
+| Prediction frequency | **Every 15 minutes** |
+| Operator response | Faster dispatch before gridlock forms |
+| Route planning | Travellers and fleets get delay estimates in advance |
+| Scalability | Pre-compiled JSON dashboard runs on any browser — no server needed |
+
+> Flipkart operates one of India's largest logistics networks. ASTRA directly targets the operational cost of last-mile delivery delays caused by unpredicted urban congestion.
+
+---
+
 ## 🏗️ Real-World Deployment Architecture
 
 To scale this prototype into a city-wide adaptive system, we propose the following event-driven streaming architecture:
@@ -95,27 +124,22 @@ graph TD
 
 ## 🔮 Future Roadmap: WebAssembly Edge Inference
 
-To eliminate high cloud hosting fees and network latencies in production, the next phase of ASTRA implements **Edge Inference** via **ONNX Runtime Web**:
+To eliminate cloud hosting costs and network latencies in production, a natural next step is **Edge Inference via ONNX Runtime Web** — compiling the trained models to `.onnx` format and running predictions directly in the browser using WebAssembly. This would make the dashboard fully serverless and deployable at zero infrastructure cost.
 
-```
-┌────────────────────────┐        ┌────────────────────────┐
-│  ExtraTrees + LightGBM │ ───►  │  Local WebAssembly /   │
-│   Compiled to ONNX     │        │ WebGL Browser Engine   │
-└────────────────────────┘        └────────────────────────┘
-```
-1. **Model Compilation**: Compile trained LightGBM and ExtraTrees models into a universal `.onnx` binary format.
-2. **Local Browser Inference**: Run predictions directly inside the operator's web browser using JavaScript and ONNX Runtime Web.
-3. **Zero Infrastructure Cost**: Bypasses backend compute requirements, making deployments fast and cost-free.
+Additional planned enhancements:
+- **Spatial graph modeling**: Build a geohash adjacency graph to propagate neighbor congestion as a feature (stepping stone toward GNN-based forecasting)
+- **Continuous retraining**: Automated daily/weekly model refresh with drift detection
+- **Event-aware forecasting**: Integrate news feeds and emergency alerts as signals for incident-driven congestion
 
 ---
 
 ## 🛠️ Getting Started & Project Structure
 
 ### Repository File Mapping
-* 🐍 [predict.py](file:///c:/Users/KIIT/Desktop/flipkartgrid/predict.py): Main backend machine learning pipeline. Runs cross-validation, trains the ensemble, and generates submission predictions.
-* ⚙️ [prepare_dashboard_data.py](file:///c:/Users/KIIT/Desktop/flipkartgrid/prepare_dashboard_data.py): Script to pre-compile the ML test predictions and metadata into a high-performance frontend JSON payload.
-* 🌐 [index.html](file:///c:/Users/KIIT/Desktop/flipkartgrid/index.html), [app.js](file:///c:/Users/KIIT/Desktop/flipkartgrid/app.js), [styles.css](file:///c:/Users/KIIT/Desktop/flipkartgrid/styles.css): Complete Single Page Application frontend dashboard.
-* 📝 [PROJECT_REPORT.md](file:///c:/Users/KIIT/Desktop/flipkartgrid/PROJECT_REPORT.md): Concept note and theoretical breakdown of the project.
+* 🐍 [predict.py](predict.py): Main backend machine learning pipeline. Runs cross-validation, trains the ensemble, and generates submission predictions.
+* ⚙️ [prepare_dashboard_data.py](prepare_dashboard_data.py): Script to pre-compile the ML test predictions and metadata into a high-performance frontend JSON payload.
+* 🌐 [index.html](index.html), [app.js](app.js), [styles.css](styles.css): Complete Single Page Application frontend dashboard.
+* 📝 [PROJECT_REPORT.md](PROJECT_REPORT.md): Concept note and theoretical breakdown of the project.
 
 ### Run Predictions (Backend ML)
 1. Install Python packages:

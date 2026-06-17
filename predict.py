@@ -20,8 +20,10 @@ from sklearn.metrics import r2_score
 from sklearn.model_selection import KFold
 import lightgbm as lgb
 
-DATA_DIR = r"c:\Users\KIIT\Desktop\flipkartgrid\dataset\dataset"
-OUTPUT_PATH = r"c:\Users\KIIT\Desktop\flipkartgrid\submission.csv"
+# Paths are relative to this script's location — works on any machine
+BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR   = os.path.join(BASE_DIR, "dataset", "dataset")
+OUTPUT_PATH = os.path.join(BASE_DIR, "submission.csv")
 N_SPLITS = 5
 
 # ── helpers ──────────────────────────────────────────────────────────────────
@@ -359,19 +361,18 @@ def main():
     print(submission["demand"].describe().round(5).to_string())
 
     # ── 12. Zip source files for portal submission ────────────────
-    zip_path = r"c:\Users\KIIT\Desktop\flipkartgrid\source_files.zip"
+    zip_path = os.path.join(BASE_DIR, "source_files.zip")
     print(f"\nCreating source package at {zip_path}...")
+    source_files = [
+        "predict.py", "README.txt", "README.md", "PROJECT_REPORT.md",
+        "Traffic_Demand_Prediction.ipynb", "submission.csv",
+        "index.html", "styles.css", "app.js", "prepare_dashboard_data.py"
+    ]
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\predict.py", "predict.py")
-        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\README.txt", "README.txt")
-        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\README.md", "README.md")
-        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\PROJECT_REPORT.md", "PROJECT_REPORT.md")
-        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\Traffic_Demand_Prediction.ipynb", "Traffic_Demand_Prediction.ipynb")
-        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\submission.csv", "submission.csv")
-        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\index.html", "index.html")
-        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\styles.css", "styles.css")
-        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\app.js", "app.js")
-        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\prepare_dashboard_data.py", "prepare_dashboard_data.py")
+        for fname in source_files:
+            fpath = os.path.join(BASE_DIR, fname)
+            if os.path.exists(fpath):
+                zipf.write(fpath, fname)
     print("Source code package zipped successfully!")
 
 if __name__ == "__main__":
