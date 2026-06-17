@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRA — AI Smart Traffic & Route Analytics | Gridlock 2.0</title>
+    <meta name="description" content="ASTRA: Advanced Spatiotemporal Traffic Route Analytics — Flipkart Gridlock Hackathon 2.0 Prototype. Real-time ML-based traffic demand prediction across geohash zones.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ═══════════════════ SPLASH SCREEN ═══════════════════ -->
+<div id="splash-screen">
+    <div class="splash-bg"></div>
+    <div class="splash-content">
+        <div class="splash-logo">
+            <div class="splash-logo-icon">
+                <i class="fa-solid fa-traffic-light"></i>
+            </div>
+            <div class="splash-logo-text">
+                <span class="splash-brand">ASTRA</span>
+                <span class="splash-brand-sub">Mobility Intelligence</span>
+            </div>
+        </div>
+        <div class="splash-tagline">AI-Powered Traffic Demand Prediction</div>
+        <div class="splash-progress-wrapper">
+            <div class="splash-progress-bar" id="splash-progress"></div>
+        </div>
+        <div class="splash-status" id="splash-status">Initializing ML inference engine...</div>
+        <div class="splash-badge">
+            <i class="fa-solid fa-trophy"></i> Flipkart Gridlock Hackathon 2.0
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ MAIN APP ═══════════════════ -->
+<div class="app-container hidden" id="main-app">
+
+    <!-- ── HEADER ── -->
+    <header class="app-header">
+        <div class="header-left">
+            <div class="header-logo">
+                <div class="logo-icon-wrapper">
+                    <i class="fa-solid fa-traffic-light icon-pulse"></i>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-text">ASTRA <span class="logo-subtext">Mobility</span></span>
+                    <span class="logo-tagline">Advanced Spatiotemporal Traffic Route Analytics</span>
+                </div>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="header-kpi" id="hkpi-zones">
+                <span class="hkpi-val">1,190</span>
+                <span class="hkpi-lbl">Monitored Zones</span>
+            </div>
+            <div class="header-kpi-divider"></div>
+            <div class="header-kpi" id="hkpi-avg">
+                <span class="hkpi-val" id="h-avg-congestion">—</span>
+                <span class="hkpi-lbl">Avg Congestion Index</span>
+            </div>
+            <div class="header-kpi-divider"></div>
+            <div class="header-kpi" id="hkpi-critical">
+                <span class="hkpi-val danger" id="h-critical-count">—</span>
+                <span class="hkpi-lbl">Critical Zones</span>
+            </div>
+            <div class="header-kpi-divider"></div>
+            <div class="header-kpi">
+                <span class="hkpi-val accent" id="h-live-time">00:00:00</span>
+                <span class="hkpi-lbl">Live Clock</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-badge">
+                <i class="fa-solid fa-microchip"></i> PROTOTYPE PHASE
+            </div>
+            <div class="header-status">
+                <div class="status-dot pulse-dot"></div>
+                <span>ML Engine Active</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── MAIN BODY ── -->
+    <main class="app-body">
+
+        <!-- ══ LEFT PANEL ══ -->
+        <section class="side-panel left-panel" id="left-panel">
+
+            <!-- System Metrics -->
+            <div class="panel-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-gauge-high"></i> Live System Metrics
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card" id="mc-zones">
+                        <div class="metric-icon-wrap" style="background:rgba(0,242,254,0.1)">
+                            <i class="fa-solid fa-location-dot" style="color:#00f2fe"></i>
+                        </div>
+                        <div class="metric-body">
+                            <span class="metric-value" id="m-total-zones">1,190</span>
+                            <span class="metric-label">Active Geohash Zones</span>
+                        </div>
+                        <div class="metric-trend up"><i class="fa-solid fa-arrow-trend-up"></i> Bengaluru Grid</div>
+                    </div>
+                    <div class="metric-card" id="mc-avg-demand">
+                        <div class="metric-icon-wrap" style="background:rgba(79,172,254,0.1)">
+                            <i class="fa-solid fa-wave-square" style="color:#4facfe"></i>
+                        </div>
+                        <div class="metric-body">
+                            <span class="metric-value" id="m-avg-demand">—</span>
+                            <span class="metric-label">Avg Congestion Index</span>
+                        </div>
+                        <div class="metric-trend neutral" id="m-avg-status">Day 49 Forecast</div>
+                    </div>
+                    <div class="metric-card" id="mc-critical">
+                        <div class="metric-icon-wrap" style="background:rgba(214,48,49,0.1)">
+                            <i class="fa-solid fa-triangle-exclamation" style="color:#d63031"></i>
+                        </div>
+                        <div class="metric-body">
+                            <span class="metric-value danger" id="m-critical-zones">—</span>
+                            <span class="metric-label">High-Congestion Zones</span>
+                        </div>
+                        <div class="metric-trend down" id="m-critical-pct">Index > 0.50</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Flow Chart -->
+            <div class="panel-section fill-height">
+                <div class="section-title">
+                    <i class="fa-solid fa-chart-line"></i> Traffic Flow — Day 48 vs Day 49
+                </div>
+                <div class="chart-container">
+                    <canvas id="global-demand-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Road Type Bar Chart -->
+            <div class="panel-section" style="min-height:180px">
+                <div class="section-title">
+                    <i class="fa-solid fa-road"></i> Demand by Road Category
+                </div>
+                <div class="chart-container" style="height:140px">
+                    <canvas id="road-type-chart"></canvas>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ══ CENTER PANEL (MAP) ══ -->
+        <section class="center-panel">
+            <div class="map-wrapper card-glass">
+                <div id="map"></div>
+
+                <!-- Map Legend Overlay -->
+                <div class="map-legend">
+                    <div class="legend-title"><i class="fa-solid fa-layer-group"></i> Congestion Index</div>
+                    <div class="legend-items">
+                        <div class="legend-item"><span class="legend-dot" style="background:#00b894"></span> Light &lt; 0.12</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:#00cec9"></span> Normal &lt; 0.28</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:#e1b12c"></span> Moderate &lt; 0.50</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span> Heavy &lt; 0.75</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:#d63031"></span> Gridlock ≥ 0.75</div>
+                    </div>
+                </div>
+
+                <!-- Map Controls Overlay: Time Slider -->
+                <div class="time-control-overlay card-glass">
+                    <div class="time-control-header">
+                        <div class="tc-left">
+                            <div class="tc-label">Forecast Timestamp</div>
+                            <div class="control-time-value" id="display-time">02:15</div>
+                        </div>
+                        <div class="tc-center">
+                            <div class="tc-day-badge">Day 49 · Prediction Phase</div>
+                            <div class="tc-progress-bar">
+                                <div class="tc-progress-fill" id="tc-progress-fill"></div>
+                            </div>
+                        </div>
+                        <div class="tc-right">
+                            <div class="tc-speed-label">Speed</div>
+                            <select id="playback-speed" class="tc-speed-select">
+                                <option value="1200">0.5×</option>
+                                <option value="800" selected>1×</option>
+                                <option value="400">2×</option>
+                                <option value="200">4×</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="time-control-slider-container">
+                        <button id="btn-play-pause" class="btn-icon" title="Play/Pause timeline">
+                            <i class="fa-solid fa-play"></i>
+                        </button>
+                        <div class="slider-wrapper">
+                            <input type="range" id="time-slider" min="0" max="55" value="9" class="slider">
+                            <div class="slider-ticks" id="slider-ticks"></div>
+                        </div>
+                        <button id="btn-fit-map" class="btn-icon-sm" title="Fit map to all zones">
+                            <i class="fa-solid fa-maximize"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ RIGHT PANEL ══ -->
+        <section class="side-panel right-panel" id="right-panel">
+
+            <!-- Top Congested Zones Leaderboard -->
+            <div class="panel-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-fire"></i> Hot Zones Leaderboard
+                </div>
+                <div class="leaderboard-list" id="leaderboard-list">
+                    <div class="lb-placeholder">Loading congestion data...</div>
+                </div>
+            </div>
+
+            <!-- Geohash Inspector -->
+            <div class="panel-section fill-height" id="inspector-panel">
+                <div class="section-title">
+                    <i class="fa-solid fa-circle-info"></i> Zone Inspector
+                </div>
+
+                <!-- Placeholder -->
+                <div id="inspector-placeholder" class="placeholder-container">
+                    <div class="placeholder-anim">
+                        <i class="fa-solid fa-map-location-dot placeholder-icon"></i>
+                        <div class="placeholder-rings">
+                            <div class="ring ring1"></div>
+                            <div class="ring ring2"></div>
+                            <div class="ring ring3"></div>
+                        </div>
+                    </div>
+                    <p class="placeholder-text">Click any zone on the map to inspect local traffic parameters and ML-predicted demand curve.</p>
+                </div>
+
+                <!-- Inspector Content -->
+                <div id="inspector-content" class="inspector-details hidden">
+                    <div class="inspector-header">
+                        <div class="inspector-header-top">
+                            <span class="inspector-geohash" id="inspect-geohash">—</span>
+                            <span class="inspector-badge" id="inspect-severity-badge">Light</span>
+                        </div>
+                        <span class="inspector-coords" id="inspect-coords">—</span>
+                    </div>
+
+                    <!-- Demand Gauge Bar -->
+                    <div class="demand-gauge-box">
+                        <div class="gauge-label-row">
+                            <span class="gauge-label">Congestion Index</span>
+                            <span class="gauge-value" id="inspect-demand-val">0.000</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div class="gauge-fill" id="inspect-gauge-fill"></div>
+                        </div>
+                        <div class="gauge-ticks">
+                            <span>0.0</span><span>0.25</span><span>0.5</span><span>0.75</span><span>1.0</span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="inspector-stats-grid">
+                        <div class="inspect-stat-card">
+                            <span class="inspect-stat-label"><i class="fa-solid fa-road"></i> Lanes</span>
+                            <span class="inspect-stat-value" id="inspect-lanes">—</span>
+                        </div>
+                        <div class="inspect-stat-card">
+                            <span class="inspect-stat-label"><i class="fa-solid fa-signs-post"></i> Road Type</span>
+                            <span class="inspect-stat-value" id="inspect-road-type">—</span>
+                        </div>
+                        <div class="inspect-stat-card">
+                            <span class="inspect-stat-label"><i class="fa-solid fa-temperature-half"></i> Temp</span>
+                            <span class="inspect-stat-value" id="inspect-temp">—</span>
+                        </div>
+                        <div class="inspect-stat-card">
+                            <span class="inspect-stat-label"><i class="fa-solid fa-cloud-sun"></i> Weather</span>
+                            <span class="inspect-stat-value" id="inspect-weather">—</span>
+                        </div>
+                    </div>
+
+                    <!-- Landmark -->
+                    <div class="inspect-landmark-box">
+                        <i class="fa-solid fa-building-flag"></i>
+                        <span class="inspect-landmark-text" id="inspect-landmark">—</span>
+                    </div>
+
+                    <!-- Mitigation Action Simulator -->
+                    <div class="inspect-mitigation-box">
+                        <span class="inspector-chart-title"><i class="fa-solid fa-sliders"></i> Traffic Mitigation Simulation</span>
+                        <div class="mitigation-options">
+                            <button class="btn-mitigation active" data-mitigation="none">
+                                <i class="fa-solid fa-circle-notch"></i> Default Flow
+                            </button>
+                            <button class="btn-mitigation" data-mitigation="signal">
+                                <i class="fa-solid fa-traffic-light"></i> Smart Light (-25%)
+                            </button>
+                            <button class="btn-mitigation" data-mitigation="divert">
+                                <i class="fa-solid fa-truck"></i> Divert Heavy (-15%)
+                            </button>
+                            <button class="btn-mitigation" data-mitigation="patrol">
+                                <i class="fa-solid fa-motorcycle"></i> Patrol Dispatch (-20%)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Mini Diurnal Chart -->
+                    <div class="inspector-chart-box">
+                        <span class="inspector-chart-title">24h Demand Curve — Day 48 vs Day 49</span>
+                        <div class="chart-container mini-chart">
+                            <canvas id="geohash-demand-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route Delay Simulator -->
+            <div class="panel-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-route"></i> Route Delay Simulator
+                </div>
+                <div class="route-simulator-container">
+                    <p class="section-desc">Draw a path on the map to estimate congestion impact and travel delay using ML forecasts.</p>
+                    <div class="sim-controls">
+                        <button id="btn-draw-route" class="btn-action">
+                            <i class="fa-solid fa-pen-nib"></i> Draw Route
+                        </button>
+                        <button id="btn-clear-route" class="btn-secondary hidden">
+                            <i class="fa-solid fa-eraser"></i> Clear
+                        </button>
+                    </div>
+                    <div id="route-stats" class="route-stats-box hidden">
+                        <div class="route-stat-item">
+                            <span class="route-stat-lbl"><i class="fa-solid fa-ruler"></i> Distance</span>
+                            <span class="route-stat-val" id="route-dist">—</span>
+                        </div>
+                        <div class="route-stat-item">
+                            <span class="route-stat-lbl"><i class="fa-solid fa-map-pin"></i> Zones</span>
+                            <span class="route-stat-val" id="route-zones">—</span>
+                        </div>
+                        <div class="route-stat-item">
+                            <span class="route-stat-lbl"><i class="fa-solid fa-chart-bar"></i> Avg Congestion</span>
+                            <span class="route-stat-val font-accent" id="route-congestion">—</span>
+                        </div>
+                        <div class="route-stat-item">
+                            <span class="route-stat-lbl"><i class="fa-solid fa-clock"></i> Est. Delay</span>
+                            <span class="route-stat-val font-warning" id="route-delay">—</span>
+                        </div>
+                        <div class="route-delay-bar-box">
+                            <div class="route-delay-bar" id="route-delay-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Alerts -->
+            <div class="panel-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-bell fa-shake" style="--fa-animation-duration:3s"></i> Live Traffic Alerts
+                    <span class="alert-count-badge" id="alert-count-badge">0</span>
+                </div>
+                <div class="alerts-container" id="alerts-list">
+                    <!-- dynamically filled -->
+                </div>
+            </div>
+
+        </section>
+    </main>
+</div>
+
+<!-- Leaflet Map JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Custom JS -->
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+dataset/
+__pycache__/
+*.zip
+*.pyc
+.gemini/
+.idea/
+.vscode/
