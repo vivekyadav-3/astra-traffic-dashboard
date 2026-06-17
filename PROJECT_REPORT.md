@@ -77,3 +77,12 @@ graph TD
 
 This ensures ASTRA functions as a closed-loop system where data flows from sensors, through our model, and directly into city infrastructure.
 
+---
+
+## 6. Future Roadmap: Serverless Edge Inference (ONNX Web)
+To bypass the need for a costly, high-latency cloud backend server in production, the next phase of ASTRA introduces **Edge Inference using ONNX Runtime Web**:
+1. **Model Compilation**: The trained LightGBM and ExtraTrees models are compiled into a universal `.onnx` binary format.
+2. **Local Browser Inference**: The frontend dashboard loads the ONNX runtime library in Javascript. When the operator changes parameters (like temperature or lane count) or triggers mitigations, the browser executes the model locally in milliseconds using WebAssembly/WebGL.
+3. **Zero Infrastructure Cost**: This eliminates the need for any dedicated cloud servers, making the deployment 100% serverless, fast, and free to scale to hundreds of local operators.
+
+
