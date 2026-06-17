@@ -5,6 +5,7 @@ zip_name = r"c:\Users\KIIT\Desktop\flipkartgrid\source_files.zip"
 files_to_zip = [
     r"c:\Users\KIIT\Desktop\flipkartgrid\predict.py",
     r"c:\Users\KIIT\Desktop\flipkartgrid\README.txt",
+    r"c:\Users\KIIT\Desktop\flipkartgrid\README.md",
     r"c:\Users\KIIT\Desktop\flipkartgrid\PROJECT_REPORT.md",
     r"c:\Users\KIIT\Desktop\flipkartgrid\Traffic_Demand_Prediction.ipynb",
     r"c:\Users\KIIT\Desktop\flipkartgrid\submission.csv",

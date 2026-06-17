@@ -364,6 +364,7 @@ def main():
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
         zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\predict.py", "predict.py")
         zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\README.txt", "README.txt")
+        zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\README.md", "README.md")
         zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\PROJECT_REPORT.md", "PROJECT_REPORT.md")
         zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\Traffic_Demand_Prediction.ipynb", "Traffic_Demand_Prediction.ipynb")
         zipf.write(r"c:\Users\KIIT\Desktop\flipkartgrid\submission.csv", "submission.csv")
