@@ -4,7 +4,7 @@
 [![Validation R2](https://img.shields.io/badge/Local_Validation_R%C2%B2-0.96400-emerald?style=for-the-badge)](https://github.com/vivekyadav-3/astra-traffic-dashboard)
 [![Tech Stack](https://img.shields.io/badge/Stack-Python_%7C_JS_%7C_Leaflet-00f2fe?style=for-the-badge)](https://github.com/vivekyadav-3/astra-traffic-dashboard)
 
-**ASTRA (AI Smart Traffic & Route Analytics)** is an advanced, production-ready spatial-temporal traffic demand prediction system and interactive command dashboard. Designed for urban settings like Bengaluru, ASTRA forecasts localized traffic congestion in 15-minute intervals across **1,190 geohash zones** up to **30–45 minutes in advance**.
+**ASTRA (AI Smart Traffic & Route Analytics)** is an advanced, deployment-oriented spatial-temporal traffic demand prediction system and interactive command dashboard. Designed for urban settings like Bengaluru, ASTRA forecasts localized traffic congestion in 15-minute intervals across **1,190 geohash zones** up to **30–45 minutes in advance**.
 
 This project provides both:
 1. A **highly optimized Machine Learning backend pipeline** yielding a strong **`0.9640` validation $R^2$ score**.
@@ -38,7 +38,7 @@ The frontend dashboard is built as a highly responsive, single-page application 
 * **Timeline Playback**: Interactive timeline slider allowing operators to scrub through predictions or run auto-play (at speeds from $0.5\text{x}$ to $4\text{x}$).
 * **Dynamic Zone Inspector**: Select any zone to view real-time meteorological parameters, lane configuration, landmarks, and rendering a comparison chart of **Day 48 Actual vs. Day 49 Predicted** demand.
 * **Traffic Mitigation Simulator**: Simulate and test congestion-relief policies (*Smart Light Control*, *Divert Heavy Vehicles*, *Patrol Dispatch*) on-the-fly and observe immediate updates to in-memory congestion scores.
-* **Route Delay Solver**: Interactively draw a route directly on the map to calculate distance, average path congestion, and estimated travel delays.
+* **Route Delay Solver**: Interactively draw a route directly on the map to calculate distance, average path congestion, and estimated travel delays. The prototype uses **congestion-weighted path traversal** across geohash zones; a production version would integrate A\* or Dijkstra over a road graph (e.g. OSRM).
 
 ---
 
@@ -98,6 +98,26 @@ A high R² score alone is not convincing. Here is why our validation is methodol
 | Scalability | Pre-compiled JSON dashboard runs on any browser — no server needed |
 
 > Flipkart operates one of India's largest logistics networks. ASTRA directly targets the operational cost of last-mile delivery delays caused by unpredicted urban congestion.
+
+---
+
+## 🔬 Example Predictions
+
+The following are real outputs from our model on Day 49 test zones, showing three congestion regimes:
+
+| Zone | Time | Day 48 Actual | Day 49 Predicted | Congestion Level |
+|---|---|---|---|---|
+| `qp096j` | 08:00 | 0.038 | 0.080 | 🟢 Free Flow |
+| `qp096j` | 09:00 | 0.107 | 0.121 | 🟢 Free Flow |
+| `qp096j` | 10:00 | 0.106 | 0.124 | 🟢 Free Flow |
+| `qp09hh` | 08:00 | 0.237 | 0.290 | 🟡 Moderate |
+| `qp09hh` | 09:00 | 0.273 | 0.287 | 🟡 Moderate |
+| `qp09hh` | 10:00 | 0.325 | 0.409 | 🟡 Moderate |
+| `qp03xk` | 08:00 | 0.242 | 0.651 | 🔴 High Congestion |
+| `qp03xk` | 09:00 | 0.297 | 0.622 | 🔴 High Congestion |
+| `qp03xk` | 11:00 | 0.223 | 0.661 | 🔴 High Congestion |
+
+Note: Zone `qp03xk` is flagged as a **high-volatility zone** (↑ `gh_std`). ASTRA predicts a significant demand surge compared to Day 48, consistent with its high standard deviation profile.
 
 ---
 
