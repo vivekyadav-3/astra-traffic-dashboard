@@ -12,7 +12,9 @@ files_to_zip = [
     r"c:\Users\KIIT\Desktop\flipkartgrid\index.html",
     r"c:\Users\KIIT\Desktop\flipkartgrid\styles.css",
     r"c:\Users\KIIT\Desktop\flipkartgrid\app.js",
-    r"c:\Users\KIIT\Desktop\flipkartgrid\prepare_dashboard_data.py"
+    r"c:\Users\KIIT\Desktop\flipkartgrid\prepare_dashboard_data.py",
+    r"c:\Users\KIIT\Desktop\flipkartgrid\dashboard_data.json",
+    r"c:\Users\KIIT\Desktop\flipkartgrid\presentation.html"
 ]
 
 print("Creating ZIP file...")
