@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ASTRA — Pitch Deck | Flipkart Gridlock 2.0</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 72px;
+  }
+
+  /* ── Slide 1: Title ── */
+  .s1 {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  }
+  .s1::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(79,172,254,0.25) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .s1 .badge {
+    display: inline-block;
+    background: rgba(79,172,254,0.15);
+    border: 1px solid rgba(79,172,254,0.4);
+    color: #4facfe;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    width: fit-content;
+  }
+  .s1 h1 {
+    font-size: 72px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .s1 .subtitle {
+    font-size: 22px;
+    color: rgba(255,255,255,0.65);
+    font-weight: 300;
+    margin-bottom: 40px;
+    max-width: 680px;
+    line-height: 1.5;
+  }
+  .s1 .meta {
+    display: flex;
+    gap: 40px;
+  }
+  .s1 .meta-item { font-size: 14px; color: rgba(255,255,255,0.4); }
+  .s1 .meta-item strong { color: #fff; display: block; font-size: 16px; margin-bottom: 2px; }
+
+  /* ── Slide 2: Problem ── */
+  .s2 { background: #0d1117; }
+  .slide-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #4facfe;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .slide-title {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 40px;
+  }
+  .slide-title span { color: #4facfe; }
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .problem-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 28px 24px;
+  }
+  .problem-card .stat {
+    font-size: 48px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #ff6b6b, #feca57);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .problem-card .label { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+  /* ── Slide 3: Solution ── */
+  .s3 { background: linear-gradient(160deg, #0d1117, #0d1117 60%, #0a1628); }
+  .solution-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 8px;
+  }
+  .sol-card {
+    background: rgba(79,172,254,0.06);
+    border: 1px solid rgba(79,172,254,0.2);
+    border-radius: 16px;
+    padding: 28px 28px;
+  }
+  .sol-card .icon { font-size: 32px; margin-bottom: 14px; }
+  .sol-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: #4facfe; }
+  .sol-card p { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.65; }
+
+  /* ── Slide 4: ML Pipeline ── */
+  .s4 { background: #0d1117; }
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 30px 0 36px;
+  }
+  .pipe-step {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    flex: 1;
+  }
+  .pipe-step .p-num { font-size: 11px; color: #4facfe; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .pipe-step .p-name { font-size: 13px; font-weight: 600; }
+  .pipe-arrow {
+    font-size: 20px;
+    color: rgba(255,255,255,0.2);
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+  .feat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .feat-item {
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid #4facfe;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.4;
+  }
+  .feat-item strong { color: #fff; display: block; font-size: 13px; }
+
+  /* ── Slide 5: Results ── */
+  .s5 { background: linear-gradient(135deg, #0d1117, #0a2010); }
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    margin: 32px 0;
+  }
+  .res-card {
+    background: rgba(46,213,115,0.07);
+    border: 1px solid rgba(46,213,115,0.2);
+    border-radius: 16px;
+    padding: 28px 20px;
+    text-align: center;
+  }
+  .res-card .num {
+    font-size: 42px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #2ed573, #7bed9f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .res-card .desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.4; }
+  .validation-note {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+  }
+  .validation-note strong { color: #fff; }
+
+  /* ── Slide 6: Example Predictions ── */
+  .s6 { background: #0d1117; }
+  table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+  th {
+    background: rgba(79,172,254,0.1);
+    color: #4facfe;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    text-align: left;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(79,172,254,0.2);
+  }
+  td {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  tr:last-child td { border-bottom: none; }
+  .badge-low { background: rgba(46,213,115,0.15); color: #2ed573; padding: 3px 10px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+  .badge-med { background: rgba(254,202,87,0.15); color: #feca57; padding: 3px 10px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+  .badge-high { background: rgba(255,107,107,0.15); color: #ff6b6b; padding: 3px 10px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+
+  /* ── Slide 7: Dashboard ── */
+  .s7 { background: #0d1117; }
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 24px;
+  }
+  .dash-feat {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 22px 22px;
+  }
+  .dash-feat .icon { font-size: 28px; flex-shrink: 0; }
+  .dash-feat h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .dash-feat p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+  /* ── Slide 8: Business Impact ── */
+  .s8 { background: linear-gradient(160deg, #0d1117, #100a28); }
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 28px;
+  }
+  .impact-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .impact-card .icon { font-size: 36px; margin-bottom: 14px; }
+  .impact-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .impact-card p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.55; }
+  .highlight { color: #4facfe; font-weight: 700; }
+  .flipkart-note {
+    margin-top: 28px;
+    background: rgba(79,172,254,0.08);
+    border: 1px solid rgba(79,172,254,0.2);
+    border-radius: 12px;
+    padding: 18px 24px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+  }
+  .flipkart-note strong { color: #4facfe; }
+
+  /* ── Slide 9: Roadmap ── */
+  .s9 { background: #0d1117; }
+  .roadmap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 28px;
+  }
+  .rm-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 22px 24px;
+    display: flex;
+    gap: 16px;
+  }
+  .rm-card .rm-dot {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .rm-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .rm-card p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+  .cta-box {
+    margin-top: 28px;
+    background: linear-gradient(90deg, rgba(79,172,254,0.1), rgba(0,242,254,0.1));
+    border: 1px solid rgba(79,172,254,0.3);
+    border-radius: 14px;
+    padding: 22px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cta-box .cta-text { font-size: 16px; font-weight: 700; }
+  .cta-box .cta-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+  .cta-box .cta-link { font-size: 14px; color: #4facfe; font-weight: 600; }
+
+  /* Print */
+  @media print {
+    body { background: #000; }
+    .slide { page-break-after: always; break-after: page; margin: 0; }
+  }
+
+  /* Screen preview: add gap between slides */
+  @media screen {
+    body { padding: 40px; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+    .slide { border-radius: 20px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 1 ══ -->
+<div class="slide s1">
+  <div class="badge">🏆 Flipkart Gridlock Hackathon 2.0 — Round 2</div>
+  <h1>ASTRA</h1>
+  <div class="subtitle">AI Smart Traffic & Route Analytics<br>Predicting urban congestion 30–45 minutes ahead</div>
+  <div class="meta">
+    <div class="meta-item"><strong>Team</strong>codealpha12</div>
+    <div class="meta-item"><strong>Theme</strong>Problem Statement 3 — Smart Mobility</div>
+    <div class="meta-item"><strong>Validation R²</strong>0.9640</div>
+    <div class="meta-item"><strong>Zones Covered</strong>1,190 geohash zones</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 2 ══ -->
+<div class="slide s2">
+  <div class="slide-label">The Problem</div>
+  <div class="slide-title">Urban traffic is <span>unpredictable</span><br>and operators react too late</div>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="stat">45+</div>
+      <div class="label">Minutes of daily commute lost to congestion in Bengaluru on average</div>
+    </div>
+    <div class="problem-card">
+      <div class="stat">0</div>
+      <div class="label">Minutes of advance warning most traffic systems give operators before gridlock forms</div>
+    </div>
+    <div class="problem-card">
+      <div class="stat">₹X Cr</div>
+      <div class="label">Estimated last-mile delivery cost from traffic delays in logistics-heavy cities</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 3 ══ -->
+<div class="slide s3">
+  <div class="slide-label">Our Solution</div>
+  <div class="slide-title">ASTRA predicts congestion<br><span>before it happens</span></div>
+  <div class="solution-row">
+    <div class="sol-card">
+      <div class="icon">🧠</div>
+      <h3>ML Prediction Engine</h3>
+      <p>Spatiotemporal ensemble model (ExtraTrees + LightGBM) forecasts demand in every geohash zone across the city for the next 30–45 minutes, updated every 15 minutes.</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">🗺️</div>
+      <h3>Operator Dashboard</h3>
+      <p>A browser-based command dashboard showing a live choropleth map of all 1,190 zones, timeline playback, zone inspection, mitigation simulation, and route delay estimation.</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">⚡</div>
+      <h3>Zero Infrastructure</h3>
+      <p>Predictions are pre-compiled into a lightweight JSON structure. The dashboard runs fully client-side — no server, no cloud cost, works on any tablet or PC in a control room.</p>
+    </div>
+    <div class="sol-card">
+      <div class="icon">🚦</div>
+      <h3>Proactive, Not Reactive</h3>
+      <p>Operators see congestion forming 30–45 minutes ahead and can simulate mitigation strategies (signal control, divert heavy vehicles, patrol dispatch) before the gridlock occurs.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 4 ══ -->
+<div class="slide s4">
+  <div class="slide-label">ML Architecture</div>
+  <div class="slide-title">Spatiotemporal <span style="color:#4facfe">Ensemble Pipeline</span></div>
+  <div class="pipeline">
+    <div class="pipe-step"><div class="p-num">01</div><div class="p-name">Raw Data</div></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="p-num">02</div><div class="p-name">Feature Engineering</div></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="p-num">03</div><div class="p-name">Bayesian Shrinkage</div></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="p-num">04</div><div class="p-name">5-Fold OOF CV</div></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="p-num">05</div><div class="p-name">Grid-Search Blend</div></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="p-num">06</div><div class="p-name">Predictions</div></div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-item"><strong>Geohash → Lat/Lon</strong>Spatial coordinate decoding with KD-Tree fallback for unseen zones</div>
+    <div class="feat-item"><strong>Cyclic Time Features</strong>sin/cos transforms on time-of-day to capture diurnal patterns</div>
+    <div class="feat-item"><strong>±15-min Lag Features</strong>Autoregressive demand from previous and next time slots</div>
+    <div class="feat-item"><strong>Volatility Proxy (gh_std)</strong>Per-zone demand std dev flags highly unpredictable areas</div>
+    <div class="feat-item"><strong>Bayesian Overlap Shift</strong>Smoothed Day48→Day49 demand shift (k=2.0 shrinkage)</div>
+    <div class="feat-item"><strong>Ensemble: ET 80% + LGB 20%</strong>OOF grid-search over 700+ weight combinations</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 5 ══ -->
+<div class="slide s5">
+  <div class="slide-label">Results</div>
+  <div class="slide-title">Strong validation across<br>all <span style="color:#2ed573">5 folds</span></div>
+  <div class="results-grid">
+    <div class="res-card">
+      <div class="num">0.964</div>
+      <div class="desc">OOF Validation R²<br>(Day 49 holdout)</div>
+    </div>
+    <div class="res-card">
+      <div class="num">1,190</div>
+      <div class="desc">Geohash zones<br>predicted</div>
+    </div>
+    <div class="res-card">
+      <div class="num">41,778</div>
+      <div class="desc">Test predictions<br>generated</div>
+    </div>
+    <div class="res-card">
+      <div class="num">20</div>
+      <div class="desc">Spatiotemporal<br>features used</div>
+    </div>
+  </div>
+  <div class="validation-note">
+    <strong>Why this score is trustworthy:</strong> Validation used 5-fold Out-of-Fold cross-validation on Day 49 data only — models never see validation rows during training. Blend weights (ET:80%, LGB:20%) were determined purely by OOF grid search, not hand-tuned. Day 49 overlap (00:00–02:00) is used as a calibration shift signal, not as a target label.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 6 ══ -->
+<div class="slide s6">
+  <div class="slide-label">Example Predictions</div>
+  <div class="slide-title">Real model outputs across<br><span style="color:#4facfe">3 congestion regimes</span></div>
+  <table>
+    <thead>
+      <tr>
+        <th>Zone</th>
+        <th>Time</th>
+        <th>Day 48 Actual</th>
+        <th>Day 49 Predicted</th>
+        <th>Congestion Level</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>qp096j</code></td><td>08:00</td><td>0.038</td><td>0.080</td>
+        <td><span class="badge-low">🟢 Free Flow</span></td>
+        <td style="color:rgba(255,255,255,0.4);font-size:12px">Low-traffic residential zone</td>
+      </tr>
+      <tr>
+        <td><code>qp096j</code></td><td>10:00</td><td>0.106</td><td>0.124</td>
+        <td><span class="badge-low">🟢 Free Flow</span></td>
+        <td style="color:rgba(255,255,255,0.4);font-size:12px">Stable, low variance</td>
+      </tr>
+      <tr>
+        <td><code>qp09hh</code></td><td>09:00</td><td>0.273</td><td>0.287</td>
+        <td><span class="badge-med">🟡 Moderate</span></td>
+        <td style="color:rgba(255,255,255,0.4);font-size:12px">Consistent mid-demand zone</td>
+      </tr>
+      <tr>
+        <td><code>qp09hh</code></td><td>10:00</td><td>0.325</td><td>0.409</td>
+        <td><span class="badge-med">🟡 Moderate</span></td>
+        <td style="color:rgba(255,255,255,0.4);font-size:12px">Rising morning demand trend</td>
+      </tr>
+      <tr>
+        <td><code>qp03xk</code></td><td>08:00</td><td>0.242</td><td>0.651</td>
+        <td><span class="badge-high">🔴 High Congestion</span></td>
+        <td style="color:rgba(255,255,255,0.4);font-size:12px">High gh_std → surge detected</td>
+      </tr>
+      <tr>
+        <td><code>qp03xk</code></td><td>11:00</td><td>0.223</td><td>0.661</td>
+        <td><span class="badge-high">🔴 High Congestion</span></td>
+        <td style="color:rgba(255,255,255,0.4);font-size:12px">Sustained peak — alert zone</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 7 ══ -->
+<div class="slide s7">
+  <div class="slide-label">Dashboard</div>
+  <div class="slide-title">Operator-first<br><span style="color:#4facfe">command interface</span></div>
+  <div class="dash-grid">
+    <div class="dash-feat">
+      <div class="icon">🗺️</div>
+      <div>
+        <h4>Choropleth Congestion Map</h4>
+        <p>All 1,190 geohash zones rendered on a dark map, color-coded from 🟢 Free Flow to 🔴 Gridlock based on predicted demand.</p>
+      </div>
+    </div>
+    <div class="dash-feat">
+      <div class="icon">⏱️</div>
+      <div>
+        <h4>Timeline Playback</h4>
+        <p>Scrub through predictions across the day or auto-play at 0.5×–4× speed. See congestion patterns evolve hour by hour.</p>
+      </div>
+    </div>
+    <div class="dash-feat">
+      <div class="icon">🔍</div>
+      <div>
+        <h4>Zone Inspector</h4>
+        <p>Click any zone to see lane count, weather, road type, and a Day 48 Actual vs Day 49 Predicted demand comparison chart.</p>
+      </div>
+    </div>
+    <div class="dash-feat">
+      <div class="icon">🚦</div>
+      <div>
+        <h4>Mitigation Simulator</h4>
+        <p>Apply Smart Signal Control, Divert Heavy Vehicles, or Patrol Dispatch to any zone. Map updates instantly showing congestion relief.</p>
+      </div>
+    </div>
+    <div class="dash-feat">
+      <div class="icon">🛣️</div>
+      <div>
+        <h4>Route Delay Solver</h4>
+        <p>Draw a route on the map. Dashboard calculates distance, average path congestion, and estimated travel delay using congestion-weighted traversal.</p>
+      </div>
+    </div>
+    <div class="dash-feat">
+      <div class="icon">💻</div>
+      <div>
+        <h4>Zero Infrastructure</h4>
+        <p>Fully client-side. Runs on any browser with no backend server. Pre-compiled JSON loads instantly on any device in the field.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 8 ══ -->
+<div class="slide s8">
+  <div class="slide-label">Business Impact</div>
+  <div class="slide-title">Why this matters for<br><span style="color:#4facfe">Flipkart logistics</span></div>
+  <div class="impact-grid">
+    <div class="impact-card">
+      <div class="icon">⏰</div>
+      <h4>30–45 Min Advance Warning</h4>
+      <p>Dispatch centers can reroute delivery vehicles <span class="highlight">before</span> a gridlock forms, not after.</p>
+    </div>
+    <div class="impact-card">
+      <div class="icon">🚚</div>
+      <h4>Fleet Efficiency</h4>
+      <p>Route Delay Solver gives real-time ETA corrections to fleet management systems, reducing failed deliveries.</p>
+    </div>
+    <div class="impact-card">
+      <div class="icon">💰</div>
+      <h4>Zero Infra Cost</h4>
+      <p>No cloud backend needed. Dashboard runs in any browser — deployable across <span class="highlight">100s of operators</span> at zero scale cost.</p>
+    </div>
+  </div>
+  <div class="flipkart-note">
+    <strong>Flipkart's last-mile network is a traffic problem in disguise.</strong> ASTRA directly reduces the operational cost of congestion-driven delivery delays across every city it's deployed in.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 9 ══ -->
+<div class="slide s9">
+  <div class="slide-label">Roadmap & Next Steps</div>
+  <div class="slide-title">From prototype to<br><span style="color:#4facfe">city-scale deployment</span></div>
+  <div class="roadmap">
+    <div class="rm-card">
+      <div class="rm-dot">🌐</div>
+      <div>
+        <h4>ONNX Edge Inference</h4>
+        <p>Compile ML models to ONNX and run predictions directly in the browser via WebAssembly — fully serverless production deployment.</p>
+      </div>
+    </div>
+    <div class="rm-card">
+      <div class="rm-dot">🔗</div>
+      <div>
+        <h4>Spatial Graph Modeling</h4>
+        <p>Build geohash adjacency graph to propagate neighbor congestion as a feature — stepping stone to GNN-based forecasting.</p>
+      </div>
+    </div>
+    <div class="rm-card">
+      <div class="rm-dot">🔄</div>
+      <div>
+        <h4>Continuous Retraining</h4>
+        <p>Automated daily/weekly model refresh with drift detection to keep predictions accurate as city traffic patterns evolve.</p>
+      </div>
+    </div>
+    <div class="rm-card">
+      <div class="rm-dot">📡</div>
+      <div>
+        <h4>Live Data Ingestion</h4>
+        <p>Kafka streaming pipeline ingesting GPS probe data, camera counts, and weather API feeds for real-time prediction updates.</p>
+      </div>
+    </div>
+  </div>
+  <div class="cta-box">
+    <div>
+      <div class="cta-text">🚀 Live Repository & Dashboard</div>
+      <div class="cta-sub">Full source code, ML pipeline, and interactive demo</div>
+    </div>
+    <div class="cta-link">github.com/vivekyadav-3/astra-traffic-dashboard</div>
+  </div>
+</div>
+
+</body>
+</html>
